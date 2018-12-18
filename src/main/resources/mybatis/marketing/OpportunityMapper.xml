@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.marketing.dao.OpportunityDao">
+
+	<select id="get" resultType="com.bootdo.marketing.domain.OpportunityDO">
+		select `id`,`source`,`name`,`probability`,`summary`,`contact`,`tel`,`opportunity_describe`,`creater`,`create_time` from marketing_opportunity where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.marketing.domain.OpportunityDO">
+		select `id`,`source`,`name`,`probability`,`summary`,`contact`,`tel`,`opportunity_describe`,`creater`,`create_time` from marketing_opportunity
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="source != null and source != ''"> and source = #{source} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="probability != null and probability != ''"> and probability = #{probability} </if>
+		  		  <if test="summary != null and summary != ''"> and summary = #{summary} </if>
+		  		  <if test="contact != null and contact != ''"> and contact = #{contact} </if>
+		  		  <if test="tel != null and tel != ''"> and tel = #{tel} </if>
+		  		  <if test="opportunityDescribe != null and opportunityDescribe != ''"> and opportunity_describe = #{opportunityDescribe} </if>
+		  		  <if test="creater != null and creater != ''"> and creater = #{creater} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from marketing_opportunity
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="source != null and source != ''"> and source = #{source} </if>
+		  		  <if test="name != null and name != ''"> and name = #{name} </if>
+		  		  <if test="probability != null and probability != ''"> and probability = #{probability} </if>
+		  		  <if test="summary != null and summary != ''"> and summary = #{summary} </if>
+		  		  <if test="contact != null and contact != ''"> and contact = #{contact} </if>
+		  		  <if test="tel != null and tel != ''"> and tel = #{tel} </if>
+		  		  <if test="opportunityDescribe != null and opportunityDescribe != ''"> and opportunity_describe = #{opportunityDescribe} </if>
+		  		  <if test="creater != null and creater != ''"> and creater = #{creater} </if>
+		  		  <if test="createTime != null and createTime != ''"> and create_time = #{createTime} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.marketing.domain.OpportunityDO" useGeneratedKeys="true" keyProperty="id">
+		insert into marketing_opportunity
+		(
+			`source`, 
+			`name`, 
+			`probability`, 
+			`summary`, 
+			`contact`, 
+			`tel`, 
+			`opportunity_describe`, 
+			`creater`, 
+			`create_time`
+		)
+		values
+		(
+			#{source}, 
+			#{name}, 
+			#{probability}, 
+			#{summary}, 
+			#{contact}, 
+			#{tel}, 
+			#{opportunityDescribe}, 
+			#{creater}, 
+			#{createTime}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.marketing.domain.OpportunityDO">
+		update marketing_opportunity 
+		<set>
+			<if test="source != null">`source` = #{source}, </if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="probability != null">`probability` = #{probability}, </if>
+			<if test="summary != null">`summary` = #{summary}, </if>
+			<if test="contact != null">`contact` = #{contact}, </if>
+			<if test="tel != null">`tel` = #{tel}, </if>
+			<if test="opportunityDescribe != null">`opportunity_describe` = #{opportunityDescribe}, </if>
+			<if test="creater != null">`creater` = #{creater}, </if>
+			<if test="createTime != null">`create_time` = #{createTime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from marketing_opportunity where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from marketing_opportunity where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
